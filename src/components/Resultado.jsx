@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import { formatarTexto } from '../services/displayService';
 
 /**
@@ -7,11 +8,25 @@ import { formatarTexto } from '../services/displayService';
 function Resultado({ item }) {
     return (
         <p
+            className="mb-0"
             dangerouslySetInnerHTML={{
                 __html: formatarTexto(item),
             }}
         />
     );
 }
+
+// Validação de props
+Resultado.propTypes = {
+    item: PropTypes.shape({
+        tipo: PropTypes.string.isRequired,
+        mensagem: PropTypes.string,
+        fonte: PropTypes.string.isRequired,
+        hora: PropTypes.number,
+        link: PropTypes.string,
+        nome: PropTypes.string,
+        evento: PropTypes.string,
+    }).isRequired,
+};
 
 export default Resultado;

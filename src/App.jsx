@@ -25,20 +25,54 @@ const dadosIniciais = [
 
 function App() {
     const [resultados, setResultados] = useState(dadosIniciais);
+    const [termoBusca, setTermoBusca] = useState('');
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        // Simula busca (futuramente será uma chamada à API)
+        const resultadosFiltrados = dadosIniciais.filter((item) =>
+            Object.values(item).some(
+                (val) =>
+                    typeof val === 'string' &&
+                    val.toLowerCase().includes(termoBusca.toLowerCase())
+            )
+        );
+        setResultados(resultadosFiltrados);
+    };
 
     return (
-        <div className="app">
-            <header>
-                <h1>Assistente Virtual</h1>
+        <div className="container mt-5">
+            <header className="mb-4">
+                <h1 className="text-center">Assistente Virtual</h1>
             </header>
             <main>
+                <form onSubmit={handleSubmit} className="mb-4">
+                    <div className="input-group">
+                        <input
+                            type="text"
+                            className="form-control"
+                            placeholder="Digite sua busca (ex.: Reunião, Relatório)"
+                            value={termoBusca}
+                            onChange={(e) => setTermoBusca(e.target.value)}
+                        />
+                        <button type="submit" className="btn btn-primary">
+                            Buscar
+                        </button>
+                    </div>
+                </form>
                 <section aria-live="polite">
                     {resultados.length > 0 ? (
-                        resultados.map((item, index) => (
-                            <Resultado key={index} item={item} />
-                        ))
+                        <ul className="list-group">
+                            {resultados.map((item, index) => (
+                                <li key={index} className="list-group-item">
+                                    <Resultado item={item} />
+                                </li>
+                            ))}
+                        </ul>
                     ) : (
-                        <p>Nenhum resultado encontrado.</p>
+                        <div className="alert alert-warning" role="alert">
+                            Nenhum resultado encontrado.
+                        </div>
                     )}
                 </section>
             </main>
